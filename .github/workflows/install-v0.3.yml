@@ -23,8 +23,13 @@ jobs:
           mkdir .runtime_install_tmp
           unzip -q runtime-update.zip -d .runtime_install_tmp
 
+          # GitHub's workflow token can write repository contents but cannot
+          # create/update workflow files without the separate workflows permission.
+          # Keep workflow installation as a manual, one-time step.
+          rm -rf .runtime_install_tmp/.github
+
           # v0.1 does not yet have the permanent updater contract, so the first
-          # upgrade removes only the known runtime-owned paths. Unrelated files survive.
+          # upgrade removes only known runtime-owned non-workflow paths.
           for managed in \
             runtime schemas tests examples docs \
             README.md ATTRIBUTION.md LICENSE CHANGELOG.md pyproject.toml .gitignore \
@@ -36,8 +41,14 @@ jobs:
           rm -rf .runtime_install_tmp
           rm -f runtime-update.zip
 
-          # One-shot bridge. v0.3 installs the permanent Apply runtime update workflow.
-          rm -f .github/workflows/install-v0.3.yml
+          # Editable installs create local packaging metadata. Never commit it.
+          grep -qxF '*.egg-info/' .gitignore || printf '\n*.egg-info/\n' >> .gitignore
+
+          # Workflows are managed manually and must not be treated as runtime-owned
+          # files by the automatic updater.
+          if [ -f .runtime-managed-paths ]; then
+            sed -i '\|^\.github/workflows/|d' .runtime-managed-paths
+          fi
 
       - name: Set up Python
         uses: actions/setup-python@v7
@@ -61,8 +72,23 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          rm -rf ./*.egg-info
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
+
+          # Safety gate: this install must not modify workflow files.
+          if git diff --cached --name-only | grep -q '^\.github/workflows/'; then
+            echo "Refusing commit: workflow file change detected."
+            git diff --cached --name-only
+            exit 1
+          fi
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+
           git commit -m "runtime update v0.3.0"
           git push
+          
