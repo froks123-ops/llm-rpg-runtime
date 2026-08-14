@@ -1,0 +1,68 @@
+name: Install RPG Runtime v0.3
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  install:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Install v0.3 from runtime-update.zip
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f runtime-update.zip
+
+          rm -rf .runtime_install_tmp
+          mkdir .runtime_install_tmp
+          unzip -q runtime-update.zip -d .runtime_install_tmp
+
+          # v0.1 does not yet have the permanent updater contract, so the first
+          # upgrade removes only the known runtime-owned paths. Unrelated files survive.
+          for managed in \
+            runtime schemas tests examples docs \
+            README.md ATTRIBUTION.md LICENSE CHANGELOG.md pyproject.toml .gitignore \
+            .runtime-managed-paths; do
+            rm -rf -- "$managed"
+          done
+
+          cp -a .runtime_install_tmp/. .
+          rm -rf .runtime_install_tmp
+          rm -f runtime-update.zip
+
+          # One-shot bridge. v0.3 installs the permanent Apply runtime update workflow.
+          rm -f .github/workflows/install-v0.3.yml
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+
+      - name: Verify installed runtime
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install -e ".[dev]"
+          python -m compileall -q runtime
+          python -m pytest -q
+          python - <<'PY'
+          from runtime import __version__
+          assert __version__ == "0.3.0", __version__
+          print(f"verified runtime {__version__}")
+          PY
+
+      - name: Commit installed runtime
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "runtime update v0.3.0"
+          git push
