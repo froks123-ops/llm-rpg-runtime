@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "npcs": {
+    "Mira": {
+      "location": "North Gate",
+      "knowledge": {
+        "knows": ["The scout did not return before dusk."],
+        "suspects": ["The old road may be unsafe."],
+        "believes": [],
+        "remembers": ["The scout left at noon."]
+      },
+      "relationships": {
+        "Player": {"trust": 70}
+      },
+      "goals": [
+        {"id": "find-scout", "dc": 60, "progress": 0}
+      ]
+    },
+    "Tomas": {
+      "location": "Market",
+      "knowledge": {
+        "knows": [],
+        "suspects": [],
+        "believes": [],
+        "remembers": []
+      },
+      "relationships": {},
+      "goals": []
+    }
+  }
+}

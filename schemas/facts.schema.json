@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": ["id", "text", "status", "known_by", "source"],
+    "properties": {
+      "id": {"type": "string"},
+      "text": {"type": "string"},
+      "status": {"enum": ["canonical", "retconned", "superseded"]},
+      "known_by": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+      "witnesses": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+      "source": {"type": "string"},
+      "supersedes": {"type": ["string", "null"]}
+    },
+    "additionalProperties": true
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["version", "npcs"],
+  "properties": {
+    "version": {"type": "integer", "minimum": 1},
+    "npcs": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["knowledge", "relationships"],
+        "properties": {
+          "knowledge": {
+            "type": "object",
+            "required": ["knows", "suspects", "believes", "remembers"],
+            "properties": {
+              "knows": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+              "suspects": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+              "believes": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+              "remembers": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
+            },
+            "additionalProperties": false
+          },
+          "relationships": {"type": "object"},
+          "goals": {"type": "array", "items": {"type": "object"}},
+          "location": {"type": ["string", "null"]}
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": false
+}

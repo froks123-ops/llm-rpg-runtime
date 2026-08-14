@@ -1,0 +1,18 @@
+[
+  {
+    "id": "fact.scout.missing",
+    "text": "The scout did not return before dusk.",
+    "status": "canonical",
+    "known_by": ["Mira"],
+    "witnesses": ["Mira"],
+    "source": "example-scene-001"
+  },
+  {
+    "id": "fact.player.private-note",
+    "text": "The player has an out-of-character note that NPCs must not inherit.",
+    "status": "canonical",
+    "known_by": ["player"],
+    "witnesses": [],
+    "source": "example-meta-001"
+  }
+]
