@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Campaign HEAD",
+  "type": "object",
+  "required": ["version", "session", "scene_id", "location", "present_npcs", "active_threads"],
+  "properties": {
+    "version": {"type": "integer", "minimum": 1},
+    "session": {"type": "integer", "minimum": 1},
+    "scene_id": {"type": "string", "minLength": 1},
+    "day": {"type": ["string", "integer"]},
+    "time": {"type": "string"},
+    "location": {"type": "string", "minLength": 1},
+    "player_character": {"type": ["string", "null"]},
+    "present_npcs": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    },
+    "active_threads": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    },
+    "current_scene": {"type": "string"},
+    "last_canonical_event_id": {"type": ["string", "null"]},
+    "next_decision": {"type": ["string", "null"]}
+  },
+  "additionalProperties": true
+}

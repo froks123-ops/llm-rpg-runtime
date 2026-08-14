@@ -7,5 +7,8 @@ venv/
 .env.*
 .DS_Store
 *.zip
+!runtime-update.zip
 coverage.xml
 htmlcov/
+
+*.egg-info/

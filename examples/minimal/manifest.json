@@ -1,0 +1,26 @@
+{
+  "schema_version": 2,
+  "campaign_id": "example-campaign",
+  "campaign": "Minimal Example",
+  "runtime_version": "0.2.0",
+  "current_session": 1,
+  "current_scene": {"id": "s001-sc001", "label": "North Gate"},
+  "canonical_files": {
+    "head": "01_HEAD",
+    "active_state": "02_ACTIVE_STATE",
+    "npc_state": "03_NPC_STATE",
+    "thread_state": "04_THREADS",
+    "facts": "05_FACTS",
+    "event_log": "06_EVENTS",
+    "checkpoints": "07_CHECKPOINTS",
+    "archive": "08_ARCHIVE"
+  },
+  "storage": {
+    "provider": "example",
+    "root_id": null,
+    "optimistic_concurrency": true,
+    "checkpoint_policy": "scene-boundary-or-destructive-change"
+  },
+  "last_event_seq": 1,
+  "last_checkpoint_id": null
+}

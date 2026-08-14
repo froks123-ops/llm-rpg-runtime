@@ -1,0 +1,20 @@
+{
+  "version": 2,
+  "threads": {
+    "missing_scout": {
+      "status": "active",
+      "phase": "search",
+      "progress": 0,
+      "next_move": "The watch will organize a search at dawn if nothing changes.",
+      "participants": ["mira"],
+      "depends_on_fact_ids": ["fact.scout.missing"]
+    },
+    "market_dispute": {
+      "status": "paused",
+      "phase": "negotiation",
+      "progress": 1,
+      "participants": ["tomas"],
+      "depends_on_fact_ids": []
+    }
+  }
+}

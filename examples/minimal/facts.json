@@ -2,17 +2,58 @@
   {
     "id": "fact.scout.missing",
     "text": "The scout did not return before dusk.",
-    "status": "canonical",
-    "known_by": ["Mira"],
-    "witnesses": ["Mira"],
-    "source": "example-scene-001"
+    "status": "active",
+    "truth_status": "true",
+    "known_by": ["player", "npc:mira"],
+    "witnesses": ["player", "npc:mira"],
+    "source": {"scene_id": "s001-sc001", "session": 1, "kind": "narrative"},
+    "entities": ["npc:mira"],
+    "threads": ["missing_scout"],
+    "depends_on": [],
+    "importance": 70
   },
   {
-    "id": "fact.player.private-note",
-    "text": "The player has an out-of-character note that NPCs must not inherit.",
-    "status": "canonical",
-    "known_by": ["player"],
+    "id": "fact.road.unsafe-rumor",
+    "text": "Mira suspects the old road may be unsafe.",
+    "status": "active",
+    "truth_status": "unknown",
+    "known_by": [],
     "witnesses": [],
-    "source": "example-meta-001"
+    "source": {"scene_id": "s001-sc001", "session": 1, "kind": "narrative"},
+    "entities": ["npc:mira"],
+    "threads": ["missing_scout"],
+    "depends_on": ["fact.scout.missing"]
+  },
+  {
+    "id": "fact.gm.hidden-cause",
+    "text": "A collapsed bridge delayed the scout.",
+    "status": "active",
+    "truth_status": "true",
+    "known_by": [],
+    "witnesses": [],
+    "source": {"scene_id": "s001-sc001", "session": 1, "kind": "system"},
+    "threads": ["missing_scout"],
+    "depends_on": [],
+    "importance": 80
+  },
+  {
+    "id": "fact.old.location",
+    "text": "The scout is at the watchtower.",
+    "status": "superseded",
+    "truth_status": "true",
+    "source": "import:legacy",
+    "state_key": "npc:scout:location",
+    "superseded_by": "fact.scout.location"
+  },
+  {
+    "id": "fact.scout.location",
+    "text": "The scout is near the collapsed bridge.",
+    "status": "active",
+    "truth_status": "true",
+    "known_by": [],
+    "source": {"scene_id": "s001-sc001", "session": 1, "kind": "system"},
+    "state_key": "npc:scout:location",
+    "supersedes": "fact.old.location",
+    "threads": ["missing_scout"]
   }
 ]

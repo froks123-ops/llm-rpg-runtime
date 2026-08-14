@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Thread and world-process state",
+  "type": "object",
+  "required": ["version", "threads"],
+  "properties": {
+    "version": {"type": "integer", "minimum": 1},
+    "threads": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["status"],
+        "properties": {
+          "status": {"enum": ["active", "paused", "resolved", "invalidated"]},
+          "phase": {"type": ["string", "null"]},
+          "progress": {"type": ["integer", "number", "null"]},
+          "next_move": {"type": ["string", "null"]},
+          "participants": {
+            "type": "array",
+            "items": {"type": "string"},
+            "uniqueItems": true
+          },
+          "depends_on_fact_ids": {
+            "type": "array",
+            "items": {"type": "string", "minLength": 1},
+            "uniqueItems": true
+          },
+          "invalidated_by_retcon": {
+            "type": "array",
+            "items": {"type": "string", "minLength": 1},
+            "uniqueItems": true
+          },
+          "gm_notes": {"type": "string"}
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": false
+}

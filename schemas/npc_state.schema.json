@@ -1,29 +1,195 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/llm-rpg-runtime/npc_state.schema.json",
+  "title": "NPC state",
   "type": "object",
-  "required": ["version", "npcs"],
+  "required": [
+    "version",
+    "npcs"
+  ],
   "properties": {
-    "version": {"type": "integer", "minimum": 1},
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
     "npcs": {
       "type": "object",
       "additionalProperties": {
         "type": "object",
-        "required": ["knowledge", "relationships"],
+        "required": [
+          "knowledge",
+          "relationships"
+        ],
         "properties": {
+          "name": {
+            "type": "string"
+          },
+          "faction": {
+            "type": "string"
+          },
+          "location": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
           "knowledge": {
             "type": "object",
-            "required": ["knows", "suspects", "believes", "remembers"],
+            "required": [
+              "knows",
+              "suspects",
+              "believes",
+              "remembers"
+            ],
             "properties": {
-              "knows": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
-              "suspects": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
-              "believes": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
-              "remembers": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
+              "knows": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "uniqueItems": true
+              },
+              "suspects": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "uniqueItems": true
+              },
+              "believes": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "uniqueItems": true
+              },
+              "remembers": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "uniqueItems": true
+              }
             },
             "additionalProperties": false
           },
-          "relationships": {"type": "object"},
-          "goals": {"type": "array", "items": {"type": "object"}},
-          "location": {"type": ["string", "null"]}
+          "relationships": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "properties": {
+                "stance": {
+                  "type": "string"
+                },
+                "trust": {
+                  "type": "integer",
+                  "minimum": -100,
+                  "maximum": 100
+                },
+                "affection": {
+                  "type": "integer",
+                  "minimum": -100,
+                  "maximum": 100
+                },
+                "respect": {
+                  "type": "integer",
+                  "minimum": -100,
+                  "maximum": 100
+                },
+                "notes": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "basis_fact_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "uniqueItems": true
+                },
+                "needs_rebuild": {
+                  "type": "boolean"
+                },
+                "invalidated_basis_fact_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "uniqueItems": true
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "goals": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "id"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "text": {
+                  "type": "string"
+                },
+                "status": {
+                  "enum": [
+                    "active",
+                    "paused",
+                    "completed",
+                    "failed",
+                    "invalidated"
+                  ]
+                },
+                "dc": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 100
+                },
+                "modifier": {
+                  "type": "integer",
+                  "minimum": -100,
+                  "maximum": 100
+                },
+                "progress": {
+                  "type": "integer"
+                },
+                "target": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "depends_on_fact_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "uniqueItems": true
+                },
+                "invalidated_by_retcon": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "uniqueItems": true
+                }
+              },
+              "additionalProperties": true
+            }
+          }
         },
         "additionalProperties": true
       }

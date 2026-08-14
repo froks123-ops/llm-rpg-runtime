@@ -1,14 +1,14 @@
 # Local enhanced mode
 
-Local mode is planned, not implemented in v0.1.
+Local enhanced mode is intentionally optional and is not required by v0.2 cloud semantics.
 
-Candidate additions:
+Planned additions after the cloud state model is stable:
 
 - `sqlite-vec` for semantic archive retrieval;
 - local ONNX embeddings;
 - DeepDiff for richer nested state comparison;
-- NetworkX or a purpose-built relationship/knowledge graph;
-- Promptfoo or an equivalent regression/evaluation harness;
-- full Questforge-style filesystem manifests/checkpoint packaging.
+- NetworkX or a purpose-built relationship/knowledge graph if the simpler model stops scaling;
+- Promptfoo or equivalent regression/evaluation tooling;
+- filesystem-backed campaign snapshots compatible with Questforge-style portable saves.
 
-The local layer should remain optional. Core campaign semantics must not depend on a specific vector database or model provider.
+The local layer must not redefine canonical campaign semantics. It accelerates retrieval, replay, testing and tooling around the same manifest/fact/event model used by cloud mode.

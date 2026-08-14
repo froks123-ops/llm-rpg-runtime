@@ -2,55 +2,76 @@
 
 ## Separation of responsibilities
 
-The runtime separates four concerns that are often collapsed into one LLM prompt:
+The runtime separates concerns that are commonly collapsed into one giant prompt:
 
-1. **GM policy** — agency rules, simulation principles, narrative constraints.
-2. **Canonical state** — current world, character, NPC, thread, and fact state.
-3. **Deterministic mechanics** — RNG, validation, diffs, world ticks.
-4. **Archive retrieval** — only relevant historical material is brought back into active context.
+1. **GM policy** — agency rules, simulation principles and narrative constraints.
+2. **Canonical state** — current world, PC/NPC, thread and fact projections.
+3. **Epistemic state** — who knows, suspects, believes or remembers which proposition.
+4. **Deterministic mechanics** — RNG, validation, diffs, world ticks and lifecycle rules.
+5. **Event history** — why durable state changed.
+6. **Archive retrieval** — older narrative loaded only when provenance/relevance requires it.
 
 ## Turn lifecycle
 
 ```text
 player declaration
       |
-read HEAD + active state
+read manifest + transaction journal + revisions
+      |
+recover interrupted save or fail closed
       |
 identify present NPCs / active threads
       |
-assemble scoped context
+assemble GM truth + actor-scoped views
       |
 resolve required deterministic mechanics
       |
 LLM generates GM response
       |
-extract proposed durable state changes
+extract proposed durable changes
       |
-validate -> diff -> persist -> event log
+schema validation
+      |
+cross-document integrity
+      |
+state diff -> mutation event
+      |
+journal PREPARED
+      |
+write state docs -> event log -> HEAD -> manifest LAST
+      |
+journal IDLE
+      |
+readback + preflight
 ```
 
-## Knowledge isolation
+## Epistemic firewall
 
-NPC knowledge should be modeled explicitly rather than inferred from global campaign truth. The current schema supports four practical buckets:
+The context pack deliberately separates:
 
-- `knows`
-- `suspects`
-- `believes`
-- `remembers`
+- `gm_truth` — active true/subjective facts needed to simulate the world;
+- `player_epistemic_view` — PC `knows / suspects / believes / remembers` from `active_state`;
+- `player_view` — compatibility view of PC-visible facts;
+- `ooc_view` — facts shown to the human user but not known by the PC;
+- `npc_views.<id>` — `knows / suspects / believes / remembers` for each present NPC.
 
-Facts may also carry `known_by`, `witnesses`, provenance, and supersession metadata. Future versions should normalize these into stable fact IDs rather than free-text strings.
+NPC/player fact views omit GM truth status, dependencies and source provenance.
 
-## Persistence
+## Persistence contract
 
-Cloud mode should use stable IDs and optimistic concurrency where the backend supports it. Google Docs/Drive can provide revision IDs for fail-fast writes. Campaign checkpoints should be explicit artifacts; provider revision history is not considered a sufficient checkpoint mechanism by itself.
+The runtime is storage-agnostic. A provider adapter supplies stable document IDs and revision tokens. Writes use optimistic concurrency.
 
-## Local mode
+Multi-document cloud saves use two durable control records:
 
-Future local mode can add:
+1. a stable **transaction journal** containing the prepared roll-forward envelope;
+2. the **manifest**, written last, as the commit pointer for the canonical snapshot.
 
-- filesystem/JSON canonical state;
-- sqlite + sqlite-vec archive index;
-- local embeddings;
-- DeepDiff or equivalent;
-- automated prompt/regression evaluation;
-- richer relationship/knowledge graph queries.
+The journal envelope records each changed document's ID, base revision, BEFORE hash, AFTER hash and intended AFTER content. On restart, recovery is automatic only when every fresh document matches one of those two hashes. Any third value is treated as a concurrent/external edit and blocks automatic writes.
+
+Provider revision history is useful audit evidence but is not a substitute for explicit campaign checkpoints.
+
+## Context ranking
+
+Structured routing precedes archive search. Candidate facts are scored using deterministic signals: explicit request, pinning, active-thread linkage, current-scene provenance, present actors, PC-only relevance, explicit epistemic references and importance. Only the configured top budget enters the hot context.
+
+This is intentionally not pure vector RAG. Semantic archive retrieval may locate source scenes, but structured canonical state decides which propositions are active and who may use them.

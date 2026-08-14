@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "session": 1,
+  "scene_id": "s001-sc001",
+  "day": 1,
+  "time": "evening",
+  "location": "North Gate",
+  "player_character": "pc:traveler",
+  "present_npcs": ["mira"],
+  "active_threads": ["missing_scout"],
+  "current_scene": "Mira waits at the gate after the scout fails to return.",
+  "last_canonical_event_id": "evt:001",
+  "next_decision": "Player chooses whether to investigate."
+}

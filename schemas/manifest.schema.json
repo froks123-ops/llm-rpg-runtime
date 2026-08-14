@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Campaign manifest",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "campaign_id",
+    "campaign",
+    "current_session",
+    "current_scene",
+    "canonical_files"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "minimum": 2
+    },
+    "campaign_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "campaign": {
+      "type": "string",
+      "minLength": 1
+    },
+    "runtime_version": {
+      "type": "string"
+    },
+    "current_session": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "current_scene": {
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "label": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "canonical_files": {
+      "type": "object",
+      "required": [
+        "head",
+        "active_state",
+        "npc_state",
+        "thread_state",
+        "facts",
+        "event_log"
+      ],
+      "properties": {
+        "head": {
+          "type": "string",
+          "minLength": 1
+        },
+        "active_state": {
+          "type": "string",
+          "minLength": 1
+        },
+        "npc_state": {
+          "type": "string",
+          "minLength": 1
+        },
+        "thread_state": {
+          "type": "string",
+          "minLength": 1
+        },
+        "facts": {
+          "type": "string",
+          "minLength": 1
+        },
+        "event_log": {
+          "type": "string",
+          "minLength": 1
+        },
+        "checkpoints": {
+          "type": "string"
+        },
+        "archive": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "storage": {
+      "type": "object",
+      "properties": {
+        "provider": {
+          "type": "string"
+        },
+        "root_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "optimistic_concurrency": {
+          "type": "boolean"
+        },
+        "checkpoint_policy": {
+          "type": "string"
+        },
+        "transaction_journal_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "last_event_seq": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "last_checkpoint_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Append-only event log",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": [
+      "id",
+      "seq",
+      "timestamp",
+      "kind",
+      "status",
+      "source",
+      "dependencies",
+      "mutations",
+      "summary"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "seq": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "timestamp": {
+        "type": "string",
+        "minLength": 1
+      },
+      "kind": {
+        "type": "string",
+        "minLength": 1
+      },
+      "status": {
+        "enum": [
+          "active",
+          "invalidated"
+        ]
+      },
+      "source": {
+        "type": "object",
+        "properties": {
+          "session": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "scene_id": {
+            "type": "string"
+          },
+          "turn": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "additionalProperties": true
+      },
+      "actor": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "targets": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "dependencies": {
+        "type": "object",
+        "required": [
+          "fact_ids",
+          "event_ids"
+        ],
+        "properties": {
+          "fact_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "uniqueItems": true
+          },
+          "event_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "uniqueItems": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "mutations": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "document",
+            "op",
+            "path"
+          ],
+          "properties": {
+            "document": {
+              "type": "string",
+              "minLength": 1
+            },
+            "op": {
+              "enum": [
+                "add",
+                "remove",
+                "replace",
+                "add-item",
+                "remove-item"
+              ]
+            },
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "before": {},
+            "after": {}
+          },
+          "additionalProperties": false
+        }
+      },
+      "summary": {
+        "type": "string"
+      },
+      "metadata": {
+        "type": "object",
+        "additionalProperties": true
+      }
+    },
+    "additionalProperties": true
+  }
+}

@@ -1,0 +1,15 @@
+[
+  {
+    "id": "evt:001",
+    "seq": 1,
+    "timestamp": "2026-01-01T00:00:00Z",
+    "kind": "fact.established",
+    "status": "active",
+    "source": {"session": 1, "scene_id": "s001-sc001", "turn": 1},
+    "actor": "system",
+    "targets": ["fact.scout.missing"],
+    "dependencies": {"fact_ids": [], "event_ids": []},
+    "mutations": [],
+    "summary": "The scout failed to return before dusk."
+  }
+]

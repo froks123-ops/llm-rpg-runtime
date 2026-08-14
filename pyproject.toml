@@ -4,11 +4,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "llm-rpg-runtime"
-version = "0.1.0"
+version = "0.3.0"
 description = "Deterministic state, RNG, validation, retrieval and world-simulation support for long-running LLM RPG campaigns."
 readme = "README.md"
 requires-python = ">=3.11"
-license = {text = "MIT"}
+license = "MIT"
 authors = [
   {name = "froks123-ops"}
 ]
@@ -24,3 +24,7 @@ dev = [
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q"
+
+[tool.setuptools]
+packages = ["runtime", "runtime.importers"]
+

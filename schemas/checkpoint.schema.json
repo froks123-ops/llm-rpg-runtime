@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Checkpoint manifest",
+  "type": "object",
+  "required": ["schema_version", "checkpoint_id", "campaign_id", "created_at", "session", "scene_id", "files", "root_sha256"],
+  "properties": {
+    "schema_version": {"type": "integer", "minimum": 1},
+    "checkpoint_id": {"type": "string", "minLength": 1},
+    "campaign_id": {"type": "string", "minLength": 1},
+    "created_at": {"type": "string", "minLength": 1},
+    "session": {"type": "integer", "minimum": 1},
+    "scene_id": {"type": "string", "minLength": 1},
+    "files": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["sha256", "bytes"],
+        "properties": {
+          "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+          "bytes": {"type": "integer", "minimum": 0}
+        },
+        "additionalProperties": false
+      }
+    },
+    "root_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  },
+  "additionalProperties": false
+}

@@ -1,17 +1,81 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/llm-rpg-runtime/facts.schema.json",
+  "title": "Fact / proposition ledger",
   "type": "array",
   "items": {
     "type": "object",
-    "required": ["id", "text", "status", "known_by", "source"],
+    "required": ["id", "text", "status", "source"],
     "properties": {
-      "id": {"type": "string"},
-      "text": {"type": "string"},
-      "status": {"enum": ["canonical", "retconned", "superseded"]},
-      "known_by": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
-      "witnesses": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
-      "source": {"type": "string"},
-      "supersedes": {"type": ["string", "null"]}
+      "id": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 128,
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+      },
+      "text": {"type": "string", "minLength": 1},
+      "status": {
+        "enum": ["active", "canonical", "superseded", "retconned", "retracted"]
+      },
+      "truth_status": {
+        "enum": ["true", "false", "unknown", "subjective"]
+      },
+      "known_by": {
+        "type": ["array", "null"],
+        "items": {"type": "string", "minLength": 1},
+        "uniqueItems": true
+      },
+      "witnesses": {
+        "type": "array",
+        "items": {"type": "string", "minLength": 1},
+        "uniqueItems": true
+      },
+      "source": {
+        "oneOf": [
+          {"type": "string", "minLength": 1},
+          {
+            "type": "object",
+            "required": ["scene_id"],
+            "properties": {
+              "scene_id": {"type": "string", "minLength": 1},
+              "session": {"type": "integer", "minimum": 0},
+              "turn": {"type": "integer", "minimum": 0},
+              "event_id": {"type": ["string", "null"]},
+              "kind": {
+                "enum": ["narrative", "player", "oog", "manual", "import", "system"]
+              }
+            },
+            "additionalProperties": true
+          }
+        ]
+      },
+      "entities": {
+        "type": "array",
+        "items": {"type": "string", "minLength": 1},
+        "uniqueItems": true
+      },
+      "threads": {
+        "type": "array",
+        "items": {"type": "string", "minLength": 1},
+        "uniqueItems": true
+      },
+      "depends_on": {
+        "type": "array",
+        "items": {"type": "string", "minLength": 1},
+        "uniqueItems": true
+      },
+      "state_key": {"type": ["string", "null"]},
+      "supersedes": {"type": ["string", "null"]},
+      "superseded_by": {"type": ["string", "null"]},
+      "retconned_by": {"type": ["string", "null"]},
+      "retcon_reason": {"type": "string"},
+      "pinned": {"type": "boolean"},
+      "importance": {"type": "integer", "minimum": 0, "maximum": 100},
+      "tags": {
+        "type": "array",
+        "items": {"type": "string", "minLength": 1},
+        "uniqueItems": true
+      }
     },
     "additionalProperties": true
   }

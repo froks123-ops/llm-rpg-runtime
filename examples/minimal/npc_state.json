@@ -1,22 +1,38 @@
 {
-  "version": 1,
+  "version": 2,
   "npcs": {
-    "Mira": {
+    "mira": {
+      "name": "Mira",
+      "faction": "North Gate Watch",
       "location": "North Gate",
       "knowledge": {
-        "knows": ["The scout did not return before dusk."],
-        "suspects": ["The old road may be unsafe."],
+        "knows": ["fact.scout.missing"],
+        "suspects": ["fact.road.unsafe-rumor"],
         "believes": [],
-        "remembers": ["The scout left at noon."]
+        "remembers": []
       },
       "relationships": {
-        "Player": {"trust": 70}
+        "pc:traveler": {
+          "stance": "cautiously cooperative",
+          "trust": 20,
+          "basis_fact_ids": ["fact.scout.missing"]
+        }
       },
       "goals": [
-        {"id": "find-scout", "dc": 60, "progress": 0}
+        {
+          "id": "find-scout",
+          "text": "Find the missing scout.",
+          "status": "active",
+          "dc": 60,
+          "progress": 0,
+          "target": 4,
+          "depends_on_fact_ids": ["fact.scout.missing"]
+        }
       ]
     },
-    "Tomas": {
+    "tomas": {
+      "name": "Tomas",
+      "faction": "Market Guild",
       "location": "Market",
       "knowledge": {
         "knows": [],
