@@ -10,5 +10,3 @@ venv/
 !runtime-update.zip
 coverage.xml
 htmlcov/
-
-*.egg-info/

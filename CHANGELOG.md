@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.4.0
+
+### Added
+
+- deterministic player-visible output contract validator for `Raport → header → narrative → footer`;
+- explicit NPC monologue block validation and persistence-debug leak warnings;
+- output-contract documentation and regression tests.
+
+### Fixed
+
+- AI Studio imports now normalize both legacy string `systemInstruction` and the current `{"text": ...}` export shape;
+- imported AI Studio system instructions are explicitly treated as historical provenance, never current runtime rule authority;
+- runtime-managed path manifest no longer includes workflow files, keeping workflow maintenance outside automatic updates.
+
 ## 0.3.0
 
 ### Added

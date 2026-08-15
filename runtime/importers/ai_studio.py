@@ -3,6 +3,9 @@
 The importer is intentionally conservative: it preserves raw text and provenance and
 allows explicit inclusion/exclusion ranges. It does not infer canon from prose on its
 own. Retconned branches should be excluded by index/range before semantic migration.
+
+``systemInstruction`` is imported as historical source provenance only. It is never
+runtime rule authority; current project/campaign instructions remain authoritative.
 """
 
 from __future__ import annotations
@@ -39,6 +42,23 @@ class StudioExport:
     pending_inputs: tuple[Mapping[str, Any], ...]
 
 
+def _system_instruction_text(value: Any) -> str:
+    """Normalize both legacy string and current AI Studio ``{"text": ...}`` shapes."""
+
+    if value is None:
+        return ""
+    if isinstance(value, str):
+        return value
+    if isinstance(value, Mapping):
+        text = value.get("text", "")
+        if text is None:
+            return ""
+        if not isinstance(text, str):
+            raise ValueError("systemInstruction.text must be a string")
+        return text
+    raise ValueError("systemInstruction must be a string, object, or null")
+
+
 def parse_export(payload: Mapping[str, Any]) -> StudioExport:
     chunked = payload.get("chunkedPrompt", {}) or {}
     raw_chunks = chunked.get("chunks", []) if isinstance(chunked, Mapping) else []
@@ -66,7 +86,7 @@ def parse_export(payload: Mapping[str, Any]) -> StudioExport:
     pending = chunked.get("pendingInputs", []) if isinstance(chunked, Mapping) else []
     return StudioExport(
         run_settings=payload.get("runSettings", {}) or {},
-        system_instruction=str(payload.get("systemInstruction", "") or ""),
+        system_instruction=_system_instruction_text(payload.get("systemInstruction")),
         chunks=tuple(chunks),
         pending_inputs=tuple(item for item in pending if isinstance(item, Mapping)),
     )

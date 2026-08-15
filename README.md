@@ -1,6 +1,6 @@
 # llm-rpg-runtime
 
-> **Status: early alpha / v0.3.0**
+> **Status: early alpha / v0.4.0**
 
 A deterministic support layer for long-running LLM-as-GM RPG campaigns.
 
@@ -26,6 +26,7 @@ The core premise is simple: **the LLM may narrate and judge fiction, but it must
 | World simulation | `runtime/world_tick.py` | deterministic off-screen goal resolution |
 | Cloud documents | `runtime/cloud_documents.py` | native-document JSON parsing, save envelopes and roll-forward recovery |
 | Cloud bootstrap | `runtime/cloud_bootstrap.py` | journal gate → recovery decision → semantic preflight |
+| Output contract | `runtime/output_contract.py` | structural Raport → header → narrative → footer validation and debug-leak warnings |
 
 ## Architecture
 
@@ -156,7 +157,7 @@ From v0.2 onward the repository contains **Apply runtime update** in GitHub Acti
 
 ## Tests
 
-The suite covers RNG, schemas, knowledge silos, hidden facts, supersession, retcon cascades, event invalidation, checkpoints, semantic integrity, transactions, save ordering, cloud document parsing, persistent journal recovery and bootstrap gating. GitHub Actions runs the suite on Python 3.11 and 3.13.
+The suite covers RNG, schemas, knowledge silos, hidden facts, supersession, retcon cascades, event invalidation, checkpoints, semantic integrity, transactions, save ordering, cloud document parsing, persistent journal recovery, bootstrap gating, AI Studio import shapes and player-visible output structure. GitHub Actions runs the suite on Python 3.11 and 3.13.
 
 ## Design rules
 
@@ -171,8 +172,9 @@ The suite covers RNG, schemas, knowledge silos, hidden facts, supersession, retc
 9. Cloud writes use optimistic concurrency, persist a recovery journal first, and commit the manifest last.
 10. A fresh process must resolve a prepared journal before normal play.
 11. Destructive migrations/retcons require an explicit checkpoint first.
+12. Normal narrative output follows the validated Raport → header → narrative → footer contract; persistence internals stay hidden.
 
-See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md), [`docs/STATE_MODEL.md`](docs/STATE_MODEL.md), [`docs/RETCONS.md`](docs/RETCONS.md), [`docs/CLOUD_MODE.md`](docs/CLOUD_MODE.md) and the operational [`docs/CLOUD_RUNTIME_RUNBOOK.md`](docs/CLOUD_RUNTIME_RUNBOOK.md).
+See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md), [`docs/STATE_MODEL.md`](docs/STATE_MODEL.md), [`docs/RETCONS.md`](docs/RETCONS.md), [`docs/CLOUD_MODE.md`](docs/CLOUD_MODE.md) the operational [`docs/CLOUD_RUNTIME_RUNBOOK.md`](docs/CLOUD_RUNTIME_RUNBOOK.md) and [`docs/OUTPUT_CONTRACT.md`](docs/OUTPUT_CONTRACT.md).
 
 ## Influences and licensing
 

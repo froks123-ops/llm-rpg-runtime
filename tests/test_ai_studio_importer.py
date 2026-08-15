@@ -50,3 +50,21 @@ def test_archive_and_index_keep_provenance_and_scene_header():
     archive = archive_markdown(selected, title="Test")
     assert "ai-studio:chunk:0001" in archive
     assert "[Dzień 1 | Pora: Rano] scene" in archive
+
+
+
+def test_current_ai_studio_nested_system_instruction_is_normalized():
+    payload = sample_export()
+    payload["systemInstruction"] = {"text": "# SYSTEM INSTRUCTIONS\nrules"}
+    export = parse_export(payload)
+    assert export.system_instruction == "# SYSTEM INSTRUCTIONS\nrules"
+    assert not export.system_instruction.startswith("{")
+
+
+def test_invalid_nested_system_instruction_fails_closed():
+    import pytest
+
+    payload = sample_export()
+    payload["systemInstruction"] = {"text": 123}
+    with pytest.raises(ValueError, match="systemInstruction.text"):
+        parse_export(payload)
